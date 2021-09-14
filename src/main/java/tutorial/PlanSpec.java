@@ -28,10 +28,8 @@ public class PlanSpec {
      */
     public static void main(final String[] args) throws Exception {
 
-        Properties p = getValue();
-
         //By default credentials are read from the '.credentials' file.
-        BambooServer bambooServer = new BambooServer(p.getProperty("url"));
+        BambooServer bambooServer = new BambooServer(System.getenv("bamboo.spec.url"));
 
         Plan plan = new PlanSpec().createPlan();
 
@@ -42,21 +40,9 @@ public class PlanSpec {
         bambooServer.publish(planPermission);
     }
 
-    static Properties getValue(){
-        Properties p = new Properties();
-        try{
-            InputStream is = new FileInputStream("bambooConfig.properties");
-            p.load(is);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return p;
-    }
-
     PlanPermissions createPlanPermission(PlanIdentifier planIdentifier) {
-        Properties p = getValue();
         Permissions permission = new Permissions()
-                .userPermissions(p.getProperty("username"), PermissionType.ADMIN, PermissionType.CLONE, PermissionType.EDIT)
+                .userPermissions(System.getenv("bamboo.spec.admin.username"), PermissionType.ADMIN, PermissionType.CLONE, PermissionType.EDIT)
                 .groupPermissions("bamboo-admin", PermissionType.ADMIN)
                 .loggedInUserPermissions(PermissionType.VIEW)
                 .anonymousUserPermissionView();
@@ -65,15 +51,15 @@ public class PlanSpec {
 
     Project project() {
         return new Project()
-                .name("Project Name")
-                .key("PRJ");
+                .name(System.getenv("bamboo.spec.project.name"))
+                .key(System.getenv("bamboo.spec.project.key"));
     }
 
     Plan createPlan() {
         return new Plan(
                 project(),
-                "Plan Name", "PLANKEY")
-                .description("Plan created from (enter repository url of your plan)")
+                System.getenv("bamboo.spec.project.plan.name"), System.getenv("bamboo.spec.project.plan.key"))
+                .description(System.getenv("bamboo.spec.project.plan.description"))
                 .stages(
                         new Stage("Stage 1")
                                 .jobs(new Job("Build", "RUN")
