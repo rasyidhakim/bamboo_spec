@@ -12,9 +12,11 @@ import com.atlassian.bamboo.specs.api.builders.permission.Permissions;
 import com.atlassian.bamboo.specs.api.builders.permission.PermissionType;
 import com.atlassian.bamboo.specs.api.builders.permission.PlanPermissions;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Scanner;
 
 /**
  * Plan configuration for Bamboo.
@@ -27,6 +29,18 @@ public class PlanSpec {
      * Run main to publish plan on Bamboo
      */
     public static void main(final String[] args) throws Exception {
+
+        File task = new File("task.txt");
+        String data="";
+        try {
+            Scanner fScn = new Scanner(task);
+            while (fScn.hasNextLine()){
+                data = data + fScn.nextLine() + "\n";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(data);
 
         //By default credentials are read from the '.credentials' file.
         BambooServer bambooServer = new BambooServer(System.getenv("bamboo_spec_url"));
@@ -64,7 +78,7 @@ public class PlanSpec {
                         new Stage("Stage 1")
                                 .jobs(new Job("Build", "RUN")
                                         .tasks(
-                                                new ScriptTask().inlineBody("echo Hello world!"))));
+                                                new ScriptTask().inlineBody(data))));
 
     }
 
