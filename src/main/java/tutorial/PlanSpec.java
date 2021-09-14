@@ -29,7 +29,7 @@ public class PlanSpec {
     public static void main(final String[] args) throws Exception {
 
         //By default credentials are read from the '.credentials' file.
-        BambooServer bambooServer = new BambooServer(System.getenv("bamboo.spec.url"));
+        BambooServer bambooServer = new BambooServer(System.getenv("bamboo_spec_url"));
 
         Plan plan = new PlanSpec().createPlan();
 
@@ -42,7 +42,7 @@ public class PlanSpec {
 
     PlanPermissions createPlanPermission(PlanIdentifier planIdentifier) {
         Permissions permission = new Permissions()
-                .userPermissions(System.getenv("bamboo.spec.admin.username"), PermissionType.ADMIN, PermissionType.CLONE, PermissionType.EDIT)
+                .userPermissions(System.getenv("bamboo_spec_admin_username"), PermissionType.ADMIN, PermissionType.CLONE, PermissionType.EDIT)
                 .groupPermissions("bamboo-admin", PermissionType.ADMIN)
                 .loggedInUserPermissions(PermissionType.VIEW)
                 .anonymousUserPermissionView();
@@ -51,15 +51,15 @@ public class PlanSpec {
 
     Project project() {
         return new Project()
-                .name(System.getenv("bamboo.spec.project.name"))
-                .key(System.getenv("bamboo.spec.project.key"));
+                .name(System.getenv("bamboo_spec_project_name"))
+                .key(System.getenv("bamboo_spec_project_key"));
     }
 
     Plan createPlan() {
         return new Plan(
                 project(),
-                System.getenv("bamboo.spec.project.plan.name"), System.getenv("bamboo.spec.project.plan.key"))
-                .description(System.getenv("bamboo.spec.project.plan.description"))
+                System.getenv("bamboo_spec_project_plan_name"), System.getenv("bamboo_spec_project_plan_key"))
+                .description(System.getenv("bamboo_spec_project_plan_description"))
                 .stages(
                         new Stage("Stage 1")
                                 .jobs(new Job("Build", "RUN")
