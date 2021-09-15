@@ -28,19 +28,7 @@ public class PlanSpec {
     /**
      * Run main to publish plan on Bamboo
      */
-    public static void main(final String[] args) throws Exception {
-
-        File task = new File("task.txt");
-        String data="";
-        try {
-            Scanner fScn = new Scanner(task);
-            while (fScn.hasNextLine()){
-                data = data + fScn.nextLine() + "\n";
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        System.out.println(data);
+    public static void main(final String[] args)  {
 
         //By default credentials are read from the '.credentials' file.
         BambooServer bambooServer = new BambooServer(System.getenv("bamboo_spec_url"));
@@ -70,6 +58,17 @@ public class PlanSpec {
     }
 
     Plan createPlan() {
+        File task = new File("task.txt");
+        String data="";
+        try {
+            Scanner fScn = new Scanner(task);
+            while (fScn.hasNextLine()){
+                data = data + fScn.nextLine() + "\n";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(data);
         return new Plan(
                 project(),
                 System.getenv("bamboo_spec_project_plan_name"), System.getenv("bamboo_spec_project_plan_key"))
